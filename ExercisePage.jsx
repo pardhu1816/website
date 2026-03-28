@@ -25,7 +25,7 @@ import {
 } from 'lucide-react';
 import HandTracingController from '../components/HandTracingController';
 
-const API_BASE_URL = 'http://localhost/visual_motor_api/api';
+const API_BASE_URL = 'http://localhost:5000/api';
 
 const ExercisePage = () => {
     const { id } = useParams();

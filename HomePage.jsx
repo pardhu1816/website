@@ -41,7 +41,6 @@ import {
     Cpu
 } from 'lucide-react';
 import Button from '../components/Button';
-import AIConsultant from '../components/AIConsultant';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -1534,12 +1533,8 @@ const HomePage = () => {
           border: 1px solid #E2E8F0;
           transition: all 0.3s;
         }
-        .card:hover {
-          box-shadow: var(--shadow-md);
-          transform: translateY(-2px);
         }
       `}</style>
-            <AIConsultant />
         </div>
     );
 };

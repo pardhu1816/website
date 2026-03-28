@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "visual-motor-server": "file:.."
+  }
+}
