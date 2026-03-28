@@ -9,8 +9,12 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+// Handle deployment subpath
+const BASE_PATH = process.env.API_BASE_PATH || '';
+const router = express.Router();
+
 // Registration Endpoint
-app.post('/api/auth/register', (req, res) => {
+router.post('/api/auth/register', (req, res) => {
     const { username, email, password, full_name, phone_number, role } = req.body;
     const nameToUse = full_name || username || email.split('@')[0];
 
@@ -26,7 +30,7 @@ app.post('/api/auth/register', (req, res) => {
             const token = jwt.sign(userData, process.env.JWT_SECRET || 'your_secret_key');
             return res.json({ success: true, data: { ...userData, api_token: token } });
         }
-        
+
         const userData = { id: result.insertId, username: nameToUse, email, full_name: nameToUse, role: role || 'patient' };
         const token = jwt.sign(userData, process.env.JWT_SECRET || 'your_secret_key');
         res.json({ success: true, data: { ...userData, api_token: token } });
@@ -34,10 +38,10 @@ app.post('/api/auth/register', (req, res) => {
 });
 
 // Login Endpoint
-app.post('/api/auth/login', (req, res) => {
+router.post('/api/auth/login', (req, res) => {
     const { email, password } = req.body;
     const query = `SELECT * FROM users WHERE email = ? AND password = ?`;
-    
+
     db.query(query, [email, password], (err, results) => {
         if (err) {
             console.error('Login error:', err);
@@ -50,12 +54,12 @@ app.post('/api/auth/login', (req, res) => {
 
         if (results.length > 0) {
             const user = results[0];
-            const userData = { 
-                id: user.id, 
-                username: user.username, 
+            const userData = {
+                id: user.id,
+                username: user.username,
                 full_name: user.full_name || user.username,
-                email: user.email, 
-                role: user.role 
+                email: user.email,
+                role: user.role
             };
             const token = jwt.sign(userData, process.env.JWT_SECRET || 'your_secret_key');
             res.json({ success: true, data: { ...userData, api_token: token } });
@@ -134,7 +138,7 @@ db.connect((err) => {
 });
 
 // GET Endpoint: Fetch exercise sessions for a user
-app.get('/api/user-sessions/:userId', (req, res) => {
+router.get('/api/user-sessions/:userId', (req, res) => {
     const userId = req.params.userId;
     const query = 'SELECT * FROM user_sessions WHERE user_id = ? ORDER BY timestamp DESC';
 
@@ -148,7 +152,7 @@ app.get('/api/user-sessions/:userId', (req, res) => {
 });
 
 // POST Endpoint: Save a new exercise session
-app.post('/api/user-sessions', (req, res) => {
+router.post('/api/user-sessions', (req, res) => {
     const { user_id, exerciseId, title, score, accuracy, durationMinutes } = req.body;
 
     const query = `
@@ -167,7 +171,7 @@ app.post('/api/user-sessions', (req, res) => {
 });
 
 // PUT Endpoint: Update user profile
-app.put('/api/users/:id', (req, res) => {
+router.put('/api/users/:id', (req, res) => {
     const userId = req.params.id;
     const { full_name, phone_number } = req.body;
 
@@ -177,18 +181,18 @@ app.put('/api/users/:id', (req, res) => {
             console.error('Error updating user:', err);
             return res.status(500).json({ error: 'Database update failed' });
         }
-        
+
         // Fetch updated user to return
         db.query('SELECT * FROM users WHERE id = ?', [userId], (err, results) => {
             if (err || results.length === 0) {
                 return res.json({ success: true });
             }
             const user = results[0];
-            const userData = { 
-                id: user.id, 
-                username: user.username, 
+            const userData = {
+                id: user.id,
+                username: user.username,
                 full_name: user.full_name || user.username,
-                email: user.email, 
+                email: user.email,
                 role: user.role,
                 phone_number: user.phone_number
             };
@@ -212,7 +216,7 @@ const authenticateToken = (req, res, next) => {
 };
 
 // API Endpoint: POST /api/mood-analysis
-app.post('/api/mood-analysis', authenticateToken, async (req, res) => {
+router.post('/api/mood-analysis', authenticateToken, async (req, res) => {
     const { user_id, mood, stress_level, questionnaire_answers, reaction_time } = req.body;
 
     try {
@@ -279,5 +283,8 @@ app.post('/api/mood-analysis', authenticateToken, async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 5000;
+// Mount router on app
+app.use(BASE_PATH, router);
+
+const PORT = process.env.PORT || 8081;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
