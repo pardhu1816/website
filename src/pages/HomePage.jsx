@@ -59,7 +59,7 @@ const HomePage = () => {
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://14.139.187.229:8081/jan2026/spic741/visualmotortrainer';
     const handleSaveProfile = async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/users/${user.id}`, {
+            const response = await fetch(`${API_BASE_URL}/api/users/${user.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...editForm, id: user.id })
@@ -130,7 +130,7 @@ const HomePage = () => {
 
             // 1. Try fetching from Backend
             try {
-                const response = await fetch(`${API_BASE_URL}/user-sessions/${user.id}`);
+                const response = await fetch(`${API_BASE_URL}/api/user-sessions/${user.id}`);
                 if (response.ok) {
                     const data = await response.json();
                     history = data.data || [];

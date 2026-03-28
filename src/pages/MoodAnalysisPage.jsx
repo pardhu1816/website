@@ -99,7 +99,7 @@ const MoodAnalysisPage = () => {
 
         try {
             // Call PHP backend
-            const response = await fetch(`${API_BASE_URL}/mood-analysis`, {
+            const response = await fetch(`${API_BASE_URL}/api/mood-analysis`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

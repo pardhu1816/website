@@ -240,7 +240,7 @@ const ExercisePage = () => {
 
         // 1. Save to Backend (PHP)
         try {
-            await fetch(`${API_BASE_URL}/user-sessions`, {
+            await fetch(`${API_BASE_URL}/api/user-sessions`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
