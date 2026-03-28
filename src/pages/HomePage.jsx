@@ -56,7 +56,7 @@ const HomePage = () => {
         phone_number: user.phone_number || ''
     });
 
-    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://14.139.187.229:8081/jan2026/spic741/visualmotortrainer/api';
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://14.139.187.229:8081/jan2026/spic741/visualmotortrainer';
     const handleSaveProfile = async () => {
         try {
             const response = await fetch(`${API_BASE_URL}/users/${user.id}`, {

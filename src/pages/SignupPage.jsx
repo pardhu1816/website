@@ -5,7 +5,7 @@ import Input from '../components/Input';
 import Button from '../components/Button';
 
 const SignupPage = () => {
-    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://14.139.187.229:8081/jan2026/spic741/visualmotortrainer/api';
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://14.139.187.229:8081/jan2026/spic741/visualmotortrainer';
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -43,7 +43,7 @@ const SignupPage = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch(`${API_BASE_URL}/auth/register`, {
+            const response = await fetch(`${API_BASE_URL}/auth/register.php`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
