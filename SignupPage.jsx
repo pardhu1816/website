@@ -5,7 +5,7 @@ import Input from '../components/Input';
 import Button from '../components/Button';
 
 const SignupPage = () => {
-    const API_BASE_URL = 'http://localhost:5000/api';
+    const API_BASE_URL = 'http://14.139.187.229:8081/jan2026/spic741/visualmotortrainer/auth';
     const [formData, setFormData] = useState({
         username: '',
         email: '',
